@@ -89,8 +89,6 @@ struct GameView: View {
     // 記録用配列
     @State var Scores: [Score] = []
     
-    
-    
     var body: some View {
         VStack {
             Text(message)

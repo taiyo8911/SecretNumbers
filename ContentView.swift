@@ -24,7 +24,6 @@ struct ContentView: View {
                     
                     
                     // システムアイコンを3つ横に並べて表示する
-                    
                     HStack {
                         Image(systemName: "questionmark")
                         Image(systemName: "questionmark")

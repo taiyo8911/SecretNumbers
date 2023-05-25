@@ -37,7 +37,6 @@ struct AboutView: View {
                     .lineLimit(nil)
                 Spacer()
                 
-                Text("hello world")
             }
         }
     }
