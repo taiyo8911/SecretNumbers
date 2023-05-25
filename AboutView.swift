@@ -36,6 +36,8 @@ struct AboutView: View {
                     .multilineTextAlignment(.leading)
                     .lineLimit(nil)
                 Spacer()
+                
+                Text("hello")
             }
         }
     }
