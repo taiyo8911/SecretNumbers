@@ -27,8 +27,7 @@ struct AboutView: View {
 
                 Text(
                 """
-                3桁の数字を当てるゲームです。
-                すべて違う数字です。
+                3桁の異なる数字を当てるゲームです。
                 数字と場所の両方が合っている場合はヒット、数字のみ合っている場合はブローと表示します。
                 例えば、正解が123の場合、135は1ヒット、1ブローです。
                 """)
@@ -36,7 +35,6 @@ struct AboutView: View {
                     .multilineTextAlignment(.leading)
                     .lineLimit(nil)
                 Spacer()
-                
             }
         }
     }
