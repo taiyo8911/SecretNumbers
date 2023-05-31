@@ -90,158 +90,164 @@ struct GameView: View {
     @State var Scores: [Score] = []
     
     var body: some View {
-        VStack {
-            Text(message)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(40)
-
-            Spacer()
-
-            // 記録表示
-            List(Scores) { Score in
-                HStack(spacing: 0) {
-                    Text("No." + String(Score.id))
-                    Spacer()
-                    Text(Score.input)
-                    Spacer()
-                    Text(Score.score)
+        ZStack {
+            // 背景
+            LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .leading, endPoint: .trailing)
+                .ignoresSafeArea()
+            
+            VStack {
+                Text(message)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(40)
+                
+                Spacer()
+                
+                // 記録表示
+                List(Scores) { Score in
+                    HStack(spacing: 0) {
+                        Text("No." + String(Score.id))
+                        Spacer()
+                        Text(Score.input)
+                        Spacer()
+                        Text(Score.score)
+                    }
                 }
-            }
-            .frame(height: 200)
-            
-            Spacer()
-            
-            // デバッグ用
-//            Text("\(targetNumbers)" as String)
-            
-            // ユーザー入力の表示
-            Text(userInputNumbers[0]+userInputNumbers[1]+userInputNumbers[2])
-                .frame(width: 300, height: 50)
-                .background(Color.black)
-                .foregroundColor(Color.white)
-                .font(.title)
-        
-            Spacer()
-
-            
-            // ユーザー入力用数字ボタン
-            ForEach(viewButtonNumbers, id:\.self) { row in
-                HStack(spacing:10) {
-                    ForEach(row, id:\.self) { col in
-                        Button("\(col)", action:{
-                            // 入力制限
-                            // ゲームクリアしていない、ゲームオーバーでもない場合に処理をする。それ以外は何もしない。
-                            if(isGameClear == false && isGameOver == false) {
-                                // 入力した数字が同じじゃない場合
-                                if(col != userInputNumbers[0] && col != userInputNumbers[1]){
-                                    // 文字数が3文字未満の場合
-                                    if(userInputCount < stringMaxDigit) {
-                                        // 入力を受け付ける
-                                        userInputNumbers[userInputCount] = "\(col)"
-                                        userInputCount += 1
+                .frame(height: 300)
+                
+                Spacer()
+                
+                // デバッグ用
+                //            Text("\(targetNumbers)" as String)
+                
+                // ユーザー入力の表示
+                Text(userInputNumbers[0]+userInputNumbers[1]+userInputNumbers[2])
+                    .frame(width: 300, height: 50)
+                    .background(Color.black)
+                    .foregroundColor(Color.white)
+                    .font(.title)
+                
+                Spacer()
+                
+                
+                // ユーザー入力用数字ボタン
+                ForEach(viewButtonNumbers, id:\.self) { row in
+                    HStack(spacing:10) {
+                        ForEach(row, id:\.self) { col in
+                            Button("\(col)", action:{
+                                // 入力制限
+                                // ゲームクリアしていない、ゲームオーバーでもない場合に処理をする。それ以外は何もしない。
+                                if(isGameClear == false && isGameOver == false) {
+                                    // 入力した数字が同じじゃない場合
+                                    if(col != userInputNumbers[0] && col != userInputNumbers[1]){
+                                        // 文字数が3文字未満の場合
+                                        if(userInputCount < stringMaxDigit) {
+                                            // 入力を受け付ける
+                                            userInputNumbers[userInputCount] = "\(col)"
+                                            userInputCount += 1
+                                        }
                                     }
                                 }
-                            }
-                            
-                        })
-                        .frame(width: 50, height: 50)
-                        .background(Color.gray)
-                        .foregroundColor(Color.white)
-                        .font(.title)
-                        .cornerRadius(20)
-                        .padding(5)
-                    }
-                }
-            }
-            
-            
-            Spacer()
-
-            
-            HStack {
-                
-                Spacer()
-                
-                // 消去ボタン
-                Button(action: {
-                    // クリア処理
-                    // ゲームクリアしていない、ゲームオーバーでもない場合に処理をする。それ以外は何もしない。
-                    if(isGameClear == false && isGameOver == false) {
-                        // 配列を初期化
-                        userInputNumbers = ["", "", ""]
-                        // 入力文字のカウントを初期化
-                        userInputCount = 0
-                    }
-                    
-                }){
-                    Text("消去")
-                        .padding(20)
-                        .background(Color.orange)
-                        .foregroundColor(Color.white)
-                        .font(.title)
-                }
-                
-                
-                Spacer()
-                
-                // 判定ボタン
-                Button(action: {
-                    // 正誤判定処理
-                    // クリアしていない、ゲームオーバーでもない、入力が3文字の場合に処理をする。それ以外は何もしない。
-                    if(isGameClear == false && isGameOver == false && userInputCount == 3) {
-                        // ゲーム回数をデクリメントする
-                        remaining -= 1
-                        // ゲーム残り回数が0の場合はゲームオーバー
-                        if(remaining == 0) {
-                            isGameOver = true
+                                
+                            })
+                            .frame(width: 50, height: 50)
+                            .background(Color.gray)
+                            .foregroundColor(Color.white)
+                            .font(.title)
+                            .cornerRadius(20)
+                            .padding(5)
                         }
-                        
-                        // ヒット数とブロー数を数える
-                        score = count(array1:userInputNumbers, array2:targetNumbers)
-                        
-                        // 記録を追加する
-                        Scores.insert(
-                            Score(
-                                id: Scores.count+1,
-                                input: userInputNumbers[0]+userInputNumbers[1]+userInputNumbers[2],
-                                score: score[0]+"ヒット "+score[1]+"ブロー"
-                            )
-                            ,at: 0
-                        )
-                        
-                        
-                        if(score[0] == "3") {
-                            isGameClear = true
-                            message = "クリア！ \(10 - remaining)回"
-                        } else if(isGameOver == true){
-                            message = "ゲームオーバー"
-                        } else {
-                            message = "残り\(remaining)回"
-                                                        
-                            // ユーザー入力を消去する
+                    }
+                }
+                
+                
+                Spacer()
+                
+                
+                HStack {
+                    
+                    Spacer()
+                    
+                    // 消去ボタン
+                    Button(action: {
+                        // クリア処理
+                        // ゲームクリアしていない、ゲームオーバーでもない場合に処理をする。それ以外は何もしない。
+                        if(isGameClear == false && isGameOver == false) {
+                            // 配列を初期化
                             userInputNumbers = ["", "", ""]
                             // 入力文字のカウントを初期化
                             userInputCount = 0
                         }
+                        
+                    }){
+                        Text("消去")
+                            .padding(20)
+                            .background(Color.orange)
+                            .foregroundColor(Color.white)
+                            .font(.title)
                     }
-                }){
-                    Text("判定")
-                        .padding(20)
-                        .background(Color.orange)
-                        .foregroundColor(Color.white)
-                        .font(.title)
+                    
+                    
+                    Spacer()
+                    
+                    // 判定ボタン
+                    Button(action: {
+                        // 正誤判定処理
+                        // クリアしていない、ゲームオーバーでもない、入力が3文字の場合に処理をする。それ以外は何もしない。
+                        if(isGameClear == false && isGameOver == false && userInputCount == 3) {
+                            // ゲーム回数をデクリメントする
+                            remaining -= 1
+                            // ゲーム残り回数が0の場合はゲームオーバー
+                            if(remaining == 0) {
+                                isGameOver = true
+                            }
+                            
+                            // ヒット数とブロー数を数える
+                            score = count(array1:userInputNumbers, array2:targetNumbers)
+                            
+                            // 記録を追加する
+                            Scores.insert(
+                                Score(
+                                    id: Scores.count+1,
+                                    input: userInputNumbers[0]+userInputNumbers[1]+userInputNumbers[2],
+                                    score: score[0]+"ヒット "+score[1]+"ブロー"
+                                )
+                                ,at: 0
+                            )
+                            
+                            
+                            if(score[0] == "3") {
+                                isGameClear = true
+                                message = "クリア！ \(10 - remaining)回"
+                            } else if(isGameOver == true){
+                                message = "ゲームオーバー"
+                            } else {
+                                message = "残り\(remaining)回"
+                                
+                                // ユーザー入力を消去する
+                                userInputNumbers = ["", "", ""]
+                                // 入力文字のカウントを初期化
+                                userInputCount = 0
+                            }
+                        }
+                    }){
+                        Text("判定")
+                            .padding(20)
+                            .background(Color.orange)
+                            .foregroundColor(Color.white)
+                            .font(.title)
+                    }
+                    
+                    Spacer()
                 }
-                
                 Spacer()
+                
             }
-            Spacer()
-            
-        }
-        .onAppear {
-            Task {
-                // 画面が読み込まれたら正解の番号を作る
-                targetNumbers = createTargetNumbers()
+            .onAppear {
+                Task {
+                    // 画面が読み込まれたら正解の番号を作る
+                    targetNumbers = createTargetNumbers()
+                }
             }
         }
     }
