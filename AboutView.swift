@@ -36,7 +36,6 @@ struct AboutView: View {
                 .fontWeight(.bold)
                 .padding(40)
                 
-                // GameViewへのリンクボタン
                 NavigationLink(destination: GameView()) {
                     Text("ゲームスタート")
                         .font(.title)
@@ -47,9 +46,6 @@ struct AboutView: View {
                         .cornerRadius(40)
                         .padding(40)
                 }
-                
-               
-                
                 Spacer()
             }
         }

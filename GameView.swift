@@ -24,7 +24,7 @@ private let stringLength = 3
 struct GameView: View {
     // ディスプレイメッセージ
     @State private var message = "残り\(challengeNumber)回"
-
+    
     // 問題を作る
     // 規定の文字数でランダムな文字の配列を作る関数
     func createCorrectNumbers() -> (Array<String>) {
@@ -41,14 +41,14 @@ struct GameView: View {
         }
         // Set型からArray型に変換
         let targetNumString = Array(numbers)
-
+        
         return targetNumString
     }
-
+    
     // 正解の文字を保存する配列
     @State private var correctNumbers:[String] = []
-
-
+    
+    
     // ユーザーの入力を受け付ける
     @State private var userInputNumbers:[String] = ["", "", ""]
     // 入力をチェックする
@@ -56,7 +56,7 @@ struct GameView: View {
     @State private var isGameOver = false // ゲームオーバーフラグ
     @State private var userInputCount = 0 // 入力文字数カウンタ
     @State private var remaining: Int = challengeNumber // ゲームできる回数
-
+    
     // 文字数チェック
     func checkStringLength(_ target: String) -> Bool {
         if userInputCount >= stringLength {
@@ -65,12 +65,12 @@ struct GameView: View {
             return false
         }
     }
-
+    
     // 同じ文字じゃないかチェック
     func checkSameString(_ target: String) -> Bool {
         return target == userInputNumbers[0] || target == userInputNumbers[1] || target == userInputNumbers[2]
     }
-
+    
     // すべてのチェックが通った場合のみ入力文字を表示する
     func inputCheck(_ target: String) {
         if isGameClear == true {
@@ -89,28 +89,28 @@ struct GameView: View {
             userInputCount += 1
         }
     }
-
-
+    
+    
     // 正誤判定する
     // ヒット数とブロー数
     @State private var score: [String] = ["", ""]
-
+    
     // ヒット数とブロー数を計算する関数
     func count(array1: [String], array2: [String]) -> (Array<String>) {
         // ヒット数を数える（同じインデックスに同じ要素があるか数える）
         let hitCount = zip(array1, array2).filter{$0 == $1}.count
-
+        
         // ブロー数を数える（配列内のどこかに同じ要素があるか数える）
         var blowCount = array1.filter({$0 == array2[0] || $0 == array2[1] || $0 == array2[2]}).count
         // 同じ要素のカウントからヒット数を引いた値がブロー数
         blowCount = blowCount - hitCount
-
+        
         let myArray = [String(hitCount), String(blowCount)]
-
+        
         return myArray
     }
-
-
+    
+    
     // スコアの構造体
     struct Score: Identifiable {
         var id: Int
@@ -119,9 +119,8 @@ struct GameView: View {
     }
     // スコア記録配列
     @State private var Scores: [Score] = []
-
-
-
+    
+    
     var body: some View {
         VStack {
             Text(message)
@@ -129,16 +128,36 @@ struct GameView: View {
                 .fontWeight(.bold)
                 .padding(40)
             
-            // ディスプレイ
-            Text(userInputNumbers[0]+userInputNumbers[1]+userInputNumbers[2])
-                .frame(width: 300, height: 50)
-            // 背景色のみ半透明にする
-                .background(Color.black.opacity(0.1))
-                .foregroundColor(Color.black)
-                .font(.title)
-
+            HStack {
+                VStack {
+                    Text("\(userInputNumbers[0])")
+                        .frame(width: 50, height: 50)
+                        .font(.title)
+                    Text("")
+                        .frame(width: 50, height: 1)
+                        .background(Color.gray)
+                }
+                VStack {
+                    Text("\(userInputNumbers[1])")
+                        .frame(width: 50, height: 50)
+                        .font(.title)
+                    Text("")
+                        .frame(width: 50, height: 1)
+                        .background(Color.gray)
+                }
+                VStack {
+                    Text("\(userInputNumbers[2])")
+                        .frame(width: 50, height: 50)
+                        .font(.title)
+                    Text("")
+                        .frame(width: 50, height: 1)
+                        .background(Color.gray)
+                }
+            }
+            
+            
             Spacer()
-
+            
             // 記録表示
             List(Scores) { Score in
                 HStack(spacing: 0) {
@@ -150,12 +169,12 @@ struct GameView: View {
                 }
             }
             .frame(height: 300)
-
+            
             Spacer()
-
+            
             // デバッグ用
-//            Text("\(correctNumbers)" as String)
-
+            //            Text("\(correctNumbers)" as String)
+            
             // キーボード
             ForEach(keybordButtons, id:\.self) { row in
                 HStack() {
@@ -173,10 +192,10 @@ struct GameView: View {
                     }
                 }
             }
-
+            
             HStack {
                 Spacer()
-
+                
                 // 消去ボタン
                 Button(action: {
                     // ゲームクリアかゲームオーバーの場合は何もしない。
@@ -196,9 +215,9 @@ struct GameView: View {
                         .font(.title)
                         .cornerRadius(20)
                 }
-
+                
                 Spacer()
-
+                
                 // 判定ボタン
                 Button(action: {
                     // 正誤判定処理
@@ -211,10 +230,10 @@ struct GameView: View {
                     if(remaining == 0) {
                         isGameOver = true
                     }
-
+                    
                     // ヒット数とブロー数を数える
                     score = count(array1:userInputNumbers, array2:correctNumbers)
-
+                    
                     // 記録を追加する
                     Scores.insert(
                         Score(
@@ -224,8 +243,8 @@ struct GameView: View {
                         )
                         ,at: 0
                     )
-
-
+                    
+                    
                     if(score[0] == "3") {
                         isGameClear = true
                         message = "クリア！ \(challengeNumber - remaining)回"
@@ -233,7 +252,7 @@ struct GameView: View {
                         message = "ゲームオーバー"
                     } else {
                         message = "残り\(remaining)回"
-
+                        
                         // ユーザー入力を消去する
                         userInputNumbers = ["", "", ""]
                         // 入力文字のカウントを初期化
@@ -247,11 +266,11 @@ struct GameView: View {
                         .font(.title)
                         .cornerRadius(20)
                 }
-
+                
                 Spacer()
             }
             Spacer()
-
+            
         }
         // 画面が読み込まれた時の処理
         .onAppear {

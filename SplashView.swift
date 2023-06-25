@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct SplashView: View {
+    // スプラッシュ画面表示フラグ
     @State private var isActive = false
+    
+    // ダークモード判定
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {
         VStack {
             Text("Loading...")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(Color.black)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .padding()
         }
         .onAppear {
             // スプラッシュ画面が表示された2秒後にContentViewに遷移する
@@ -22,7 +27,6 @@ struct SplashView: View {
                 isActive = true
             }
         }
-        .background(Color.white)
         .edgesIgnoringSafeArea(.all)
         .fullScreenCover(isPresented: $isActive, content: {
             MainView()
