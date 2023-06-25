@@ -30,7 +30,7 @@ struct MainView: View {
                         .foregroundColor(Color.white)
                         .padding()
                     
-                    Text("3つの数字を当てるゲームです。")
+                    Text("隠された3つの数字を当てろ！")
                         .foregroundColor(Color.white)
                         .padding()
                     
