@@ -26,7 +26,7 @@ struct MainView: View {
                         .padding(.bottom, 16)
 
                     // タイトル
-                    Text("シークレットナンバーズ")
+                    Text("NUMBER HUNT")
                         .titleStyle()
                         .padding(.bottom, 8)
 

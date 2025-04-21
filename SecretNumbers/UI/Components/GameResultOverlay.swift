@@ -87,10 +87,8 @@ struct GameResultOverlay: View {
                 }
                 // 新しいゲームボタン
                 Button {
-                    print("もう一度遊ぶボタンタップ - \(resultType)")
                     // まずゲームをリセット
                     onNewGame()
-                    print("onNewGameコールバック実行完了")
 
                     // 次にUIを非表示
                     withAnimation {

@@ -46,7 +46,7 @@ struct SplashView: View {
                     .padding(.bottom, 20)
 
                     // アプリ名
-                    Text("シークレットナンバーズ")
+                    Text("Number Hunt")
                         .titleStyle()
                         .scaleEffect(scale)
                         .opacity(opacity)
